@@ -6,6 +6,7 @@ import re
 from credentials import misp_key,misp_url
 
 output = './in/misp-cve.txt'
+output = os.path.join(os.path.dirname(os.path.abspath(__file__)), output)
 
 def write_txt(filename, cve_list):
     f = open(filename, 'w')

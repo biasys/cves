@@ -20,7 +20,6 @@ def write_txt(filename, cve_list):
 
 
 def is_valid_cve(cve):
-  #^(CVE-(1999|2\d{3})-(0\d{2}[0-9]|[1-9]\d{3,}))$
   prog = re.compile(r'^(CVE-(1999|2\d{3})-(0\d{2}[0-9]|[1-9]\d{3,}))$')
   return prog.match(cve)
 
