@@ -1,7 +1,7 @@
 import argparse
 import logging
 import os
-from pymisp import PyMISP
+from pymisp import ExpandedPyMISP
 import re
 from credentials import misp_key,misp_url
 
@@ -31,14 +31,14 @@ if __name__ == '__main__':
         misp_key = args.key
 
     logger = logging.getLogger ('download_misp')
-    logger.setLevel (logging.DEBUG) # enable debug to stdout
+    logger.setLevel (logging.INFO) # enable debug to stdout
 
     if output is not None and os.path.exists(output):
         logger.error('Output file already exists, abort')
         exit(0)
 
     cve_list = []
-    pymisp = PyMISP(misp_url, misp_key, debug=True)
+    pymisp = ExpandedPyMISP(misp_url, misp_key)
 
     p = pymisp.search('attributes', values='CVE-%')['response']
     if 'Attribute' not in p:
