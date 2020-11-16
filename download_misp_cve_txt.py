@@ -34,16 +34,15 @@ if __name__ == '__main__':
     logger.setLevel (logging.INFO) # enable debug to stdout
 
     if output is not None and os.path.exists(output):
-        logger.error('Output file already exists, abort')
-        exit(0)
+        logger.error('Output file already exists, overwrite')
 
     cve_list = []
-    pymisp = ExpandedPyMISP(misp_url, misp_key)
+    pymisp = ExpandedPyMISP(misp_url, misp_key, debug=False)
 
-    p = pymisp.search('attributes', values='CVE-%')['response']
-    if 'Attribute' not in p:
+    s = pymisp.search('attributes', value='CVE-%')
+    if 'Attribute' not in s:
         exit()
-    attributes = p['Attribute']
+    attributes = s.get('Attribute')
 
     for a in attributes:
         if a['type'] == 'vulnerability':
