@@ -27,15 +27,6 @@ def save_csv(cve_array, filename):
             writer.writerow(cve)
     return
 
-# def read_csv(filename):
-#     cve_list =[]
-#     with open(filename, 'r') as f:
-#         cves = f.read()
-#         cve_list1 = cves.split(',')
-#         for cve in cve_list1:
-#             cve_list.append(cve.strip())
-#     return cve_list
-
 def read_txt(filename):
     cve_list =[]
     with open(filename, 'r') as f:
@@ -48,7 +39,6 @@ def read_txt(filename):
     return cve_list
 
 def is_valid_cve(cve):
-    #^(CVE-(1999|2\d{3})-(0\d{2}[0-9]|[1-9]\d{3,}))$
     prog = re.compile('^(CVE-(1999|2\d{3})-(0\d{2}[0-9]|[1-9]\d{3,}))$')
     return prog.match(cve)
 
@@ -66,6 +56,9 @@ def get_cve_details (cve):
     page_content = page.read()
     encoding = page.headers.get_content_charset('utf-8')
     source = page_content.decode(encoding)
+
+    # TODO look for cvss v2 and v3 hidden fields, and have different soups
+
     soup = BeautifulSoup(source, 'html.parser')
 
     data = soup.find('span', {"data-testid":"vuln-cvssv2-base-score"})
@@ -97,6 +90,9 @@ def get_cve_details (cve):
     if data:
         if data.contents:
             cve_obj['CVE_CVSS3_Vector'] = data.contents[0].replace(')','').replace('(','').strip()
+
+
+
 
     if  cve_obj['CVE_CVSS2_Score'] == 10.0 or cve_obj['CVE_CVSS3_Severity'] == 'CRITICAL':
         cve_obj['CVE_CVSS2_Severity'] = 'CRITICAL'
